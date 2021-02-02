@@ -5,19 +5,22 @@
  */
 package com.mbds.abidjan.tp01;
 
+import java.io.BufferedWriter;
+import java.io.Console;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author louis-martin
  */
-public class ExperimentServlet extends HttpServlet {
+public class EtudiantsServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +39,18 @@ public class ExperimentServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet TestHttpServlet</title>");            
+            out.println("<title>Servlet EtudiantsServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet TestHttpServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1 align='center'>GESTION DES ETUDIANTS</h1>");
+            out.println("<center>");
+            out.println("<FORM Method='POST' Action='http://localhost:8080/tp01/etudiants'>");
+            out.println("Nom :&nbsp; &nbsp;&nbsp; &nbsp; <INPUT type='text' size='100' name='nom'> <br/><br/><br/>");
+            out.println("Prénom :&nbsp; &nbsp;<INPUT type='text' size='100' name='prenom'><br/><br/><br/>");
+            out.println("Mail : &nbsp; &nbsp;&nbsp; &nbsp<INPUT type='email' size='100' name='email'><br/><br/><br/>");  
+            out.println("<INPUT type='submit' value='Sauvegarder' >");
+            out.println("</FORM>");
+            out.println("</center>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,6 +71,31 @@ public class ExperimentServlet extends HttpServlet {
         processRequest(request, response);
     }
 
+     String filepath = "E:\\tino\\important\\ESATIC\\MBDS2\\JAVA avancé\\TP01_SORO_DONIKAN_LOUIS_MARTIN\\etudiants.csv";
+       
+        
+        public static void saveRecord(String nom, String prenom, String email,String filepath)
+        {
+            try
+           {
+               FileWriter fw = new FileWriter (filepath , false);
+               BufferedWriter bw = new  BufferedWriter(fw);
+             PrintWriter pw = new PrintWriter (bw);
+
+            pw.println(nom + ';'+ prenom + ';'+email);
+            pw.flush();
+            pw.close();
+
+               JOptionPane.showMessageDialog(null, "Record saved");
+
+           }
+          catch(Exception E)
+          {
+             JOptionPane.showMessageDialog(null, "Record saved");
+           }
+        }
+    
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -70,18 +106,27 @@ public class ExperimentServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+                throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+           
+            //out.println(response.getStatus()); 
+            String nom = request.getParameter("nom");
+            String prenom = request.getParameter("prenom");
+            String email = request.getParameter("email");
+            out.println(nom +" "+ prenom+ " "+email);
+            saveRecord(nom, prenom, email, filepath);
+        }
 
     /**
      * Returns a short description of the servlet.
      *
      * @return a String containing servlet description
      */
-    @Override
+   /* @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }// </editor-fold*/
 
-}
+}}
